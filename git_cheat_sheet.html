@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Command Cheat Sheet</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .section h2 {
+            color: #34495e;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .command {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            font-size: 0.9em;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow-x: auto;
+        }
+        .command::before {
+            content: "$";
+            color: #3498db;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        .description {
+            color: #555;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .example {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            color: #856404;
+        }
+        .tip {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            color: #0c5460;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Git Command Cheat Sheet</h1>
+        
+        <div class="grid">
+            <!-- Setup & Configuration -->
+            <div class="section">
+                <h2>⚙️ Setup & Configuration</h2>
+                <div class="description">Initial Git setup</div>
+                <div class="command">git config --global user.name "Your Name"</div>
+                <div class="command">git config --global user.email "email@example.com"</div>
+                <div class="command">git config --list</div>
+                <div class="example">Example: git config --global user.name "John Doe"</div>
+            </div>
+
+            <!-- Repository Creation -->
+            <div class="section">
+                <h2>📁 Repository Creation</h2>
+                <div class="description">Initialize a new repository</div>
+                <div class="command">git init</div>
+                <div class="description">Clone an existing repository</div>
+                <div class="command">git clone &lt;url&gt;</div>
+                <div class="example">Example: git clone https://github.com/user/repo.git</div>
+            </div>
+
+            <!-- Basic Workflow -->
+            <div class="section">
+                <h2>📝 Basic Workflow</h2>
+                <div class="description">Check repository status</div>
+                <div class="command">git status</div>
+                <div class="description">Add files to staging area</div>
+                <div class="command">git add &lt;file&gt;</div>
+                <div class="command">git add .</div>
+                <div class="description">Commit changes</div>
+                <div class="command">git commit -m "message"</div>
+                <div class="example">Example: git commit -m "Add user authentication"</div>
+            </div>
+
+            <!-- Branching -->
+            <div class="section">
+                <h2>🌿 Branching</h2>
+                <div class="description">List branches</div>
+                <div class="command">git branch</div>
+                <div class="description">Create new branch</div>
+                <div class="command">git branch &lt;branch-name&gt;</div>
+                <div class="description">Switch to branch</div>
+                <div class="command">git checkout &lt;branch-name&gt;</div>
+                <div class="command">git switch &lt;branch-name&gt;</div>
+                <div class="description">Create and switch to new branch</div>
+                <div class="command">git checkout -b &lt;branch-name&gt;</div>
+                <div class="example">Example: git checkout -b feature/login</div>
+            </div>
+
+            <!-- Merging -->
+            <div class="section">
+                <h2>🔄 Merging</h2>
+                <div class="description">Merge branch into current branch</div>
+                <div class="command">git merge &lt;branch-name&gt;</div>
+                <div class="description">Delete branch</div>
+                <div class="command">git branch -d &lt;branch-name&gt;</div>
+                <div class="description">Force delete branch</div>
+                <div class="command">git branch -D &lt;branch-name&gt;</div>
+                <div class="example">Example: git merge feature/login</div>
+            </div>
+
+            <!-- Remote Operations -->
+            <div class="section">
+                <h2>🌐 Remote Operations</h2>
+                <div class="description">Add remote repository</div>
+                <div class="command">git remote add origin &lt;url&gt;</div>
+                <div class="description">List remotes</div>
+                <div class="command">git remote -v</div>
+                <div class="description">Push to remote</div>
+                <div class="command">git push origin &lt;branch&gt;</div>
+                <div class="description">Pull from remote</div>
+                <div class="command">git pull origin &lt;branch&gt;</div>
+                <div class="example">Example: git push origin main</div>
+            </div>
+
+            <!-- History & Logs -->
+            <div class="section">
+                <h2>📊 History & Logs</h2>
+                <div class="description">View commit history</div>
+                <div class="command">git log</div>
+                <div class="command">git log --oneline</div>
+                <div class="command">git log --graph</div>
+                <div class="description">Show changes in commit</div>
+                <div class="command">git show &lt;commit-hash&gt;</div>
+                <div class="description">View file changes</div>
+                <div class="command">git diff</div>
+                <div class="command">git diff --staged</div>
+            </div>
+
+            <!-- Undoing Changes -->
+            <div class="section">
+                <h2>↩️ Undoing Changes</h2>
+                <div class="description">Unstage files</div>
+                <div class="command">git reset &lt;file&gt;</div>
+                <div class="description">Discard changes in working directory</div>
+                <div class="command">git checkout -- &lt;file&gt;</div>
+                <div class="description">Reset to previous commit</div>
+                <div class="command">git reset --hard HEAD~1</div>
+                <div class="description">Revert commit</div>
+                <div class="command">git revert &lt;commit-hash&gt;</div>
+                <div class="warning">⚠️ Be careful with --hard reset, it permanently deletes changes!</div>
+            </div>
+
+            <!-- Stashing -->
+            <div class="section">
+                <h2>📦 Stashing</h2>
+                <div class="description">Stash changes</div>
+                <div class="command">git stash</div>
+                <div class="command">git stash save "message"</div>
+                <div class="description">List stashes</div>
+                <div class="command">git stash list</div>
+                <div class="description">Apply stash</div>
+                <div class="command">git stash apply</div>
+                <div class="command">git stash pop</div>
+                <div class="description">Drop stash</div>
+                <div class="command">git stash drop</div>
+            </div>
+
+            <!-- Tagging -->
+            <div class="section">
+                <h2>🏷️ Tagging</h2>
+                <div class="description">Create tag</div>
+                <div class="command">git tag &lt;tag-name&gt;</div>
+                <div class="command">git tag -a &lt;tag-name&gt; -m "message"</div>
+                <div class="description">List tags</div>
+                <div class="command">git tag</div>
+                <div class="description">Push tags</div>
+                <div class="command">git push origin &lt;tag-name&gt;</div>
+                <div class="command">git push origin --tags</div>
+                <div class="example">Example: git tag -a v1.0 -m "Version 1.0 release"</div>
+            </div>
+
+            <!-- Useful Aliases -->
+            <div class="section">
+                <h2>⚡ Useful Aliases</h2>
+                <div class="description">Set up helpful shortcuts</div>
+                <div class="command">git config --global alias.st status</div>
+                <div class="command">git config --global alias.co checkout</div>
+                <div class="command">git config --global alias.br branch</div>
+                <div class="command">git config --global alias.ci commit</div>
+                <div class="command">git config --global alias.unstage 'reset HEAD --'</div>
+                <div class="tip">💡 Now you can use 'git st' instead of 'git status'!</div>
+            </div>
+
+            <!-- Advanced Commands -->
+            <div class="section">
+                <h2>🔧 Advanced Commands</h2>
+                <div class="description">Interactive rebase</div>
+                <div class="command">git rebase -i HEAD~3</div>
+                <div class="description">Cherry pick commit</div>
+                <div class="command">git cherry-pick &lt;commit-hash&gt;</div>
+                <div class="description">Find commit that introduced bug</div>
+                <div class="command">git bisect start</div>
+                <div class="description">Search in commit messages</div>
+                <div class="command">git log --grep="pattern"</div>
+                <div class="description">Show who changed what</div>
+                <div class="command">git blame &lt;file&gt;</div>
+            </div>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Pro Tips:</strong>
+            <ul>
+                <li>Use <span class="highlight">git status</span> frequently to check your repository state</li>
+                <li>Write meaningful commit messages that explain <em>why</em> you made changes</li>
+                <li>Use branches for feature development and keep main/master stable</li>
+                <li>Pull before pushing to avoid conflicts</li>
+                <li>Use <span class="highlight">.gitignore</span> to exclude files you don't want to track</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

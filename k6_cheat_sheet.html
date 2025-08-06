@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K6 Performance Testing Cheat Sheet</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .section h2 {
+            color: #34495e;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .command {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            font-size: 0.9em;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow-x: auto;
+        }
+        .command::before {
+            content: "$";
+            color: #3498db;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            font-size: 0.85em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .description {
+            color: #555;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .example {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            color: #856404;
+        }
+        .tip {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            color: #0c5460;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .metric {
+            background: #e8f5e8;
+            padding: 5px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #27ae60;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ K6 Performance Testing Cheat Sheet</h1>
+        
+        <div class="grid">
+            <!-- Installation -->
+            <div class="section">
+                <h2>📦 Installation</h2>
+                <div class="description">Install K6 on different platforms</div>
+                <div class="command">brew install k6</div>
+                <div class="command">sudo apt-get install k6</div>
+                <div class="command">choco install k6</div>
+                <div class="command">docker run -i grafana/k6 run - &lt;script.js</div>
+                <div class="tip">💡 For Windows, use Chocolatey or download from k6.io</div>
+            </div>
+
+            <!-- Basic Test Structure -->
+            <div class="section">
+                <h2>📝 Basic Test Structure</h2>
+                <div class="description">Essential K6 test template</div>
+                <div class="code-block">import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export let options = {
+  vus: 10,
+  duration: '30s',
+};
+
+export default function() {
+  let response = http.get('https://httpbin.org/get');
+  check(response, {
+    'is status 200': (r) => r.status === 200,
+  });
+  sleep(1);
+}</div>
+            </div>
+
+            <!-- Running Tests -->
+            <div class="section">
+                <h2>🚀 Running Tests</h2>
+                <div class="description">Basic test execution</div>
+                <div class="command">k6 run script.js</div>
+                <div class="description">Run with custom VUs and duration</div>
+                <div class="command">k6 run --vus 50 --duration 2m script.js</div>
+                <div class="description">Run with iterations</div>
+                <div class="command">k6 run --iterations 100 script.js</div>
+                <div class="description">Run with stages</div>
+                <div class="command">k6 run --stage 2m:10,5m:50,2m:10 script.js</div>
+            </div>
+
+            <!-- Load Test Options -->
+            <div class="section">
+                <h2>⚙️ Load Test Options</h2>
+                <div class="description">Configure test scenarios</div>
+                <div class="code-block">export let options = {
+  // Simple load test
+  vus: 10,
+  duration: '5m',
+  
+  // Staged load test
+  stages: [
+    { duration: '2m', target: 10 },
+    { duration: '5m', target: 50 },
+    { duration: '2m', target: 0 },
+  ],
+  
+  // Thresholds
+  thresholds: {
+    http_req_duration: ['p(95)<500'],
+    http_req_failed: ['rate<0.01'],
+  },
+};</div>
+            </div>
+
+            <!-- HTTP Requests -->
+            <div class="section">
+                <h2>🌐 HTTP Requests</h2>
+                <div class="description">GET request</div>
+                <div class="code-block">let response = http.get('https://api.example.com/users');</div>
+                <div class="description">POST request</div>
+                <div class="code-block">let payload = JSON.stringify({ name: 'John' });
+let params = {
+  headers: { 'Content-Type': 'application/json' },
+};
+let response = http.post('https://api.example.com/users', payload, params);</div>
+                <div class="description">PUT/PATCH/DELETE requests</div>
+                <div class="code-block">http.put('https://api.example.com/users/1', payload, params);
+http.patch('https://api.example.com/users/1', payload, params);
+http.del('https://api.example.com/users/1');</div>
+            </div>
+
+            <!-- Checks and Assertions -->
+            <div class="section">
+                <h2>✅ Checks and Assertions</h2>
+                <div class="description">Basic response checks</div>
+                <div class="code-block">import { check } from 'k6';
+
+check(response, {
+  'status is 200': (r) => r.status === 200,
+  'response time < 500ms': (r) => r.timings.duration < 500,
+  'content type is JSON': (r) => r.headers['Content-Type'] === 'application/json',
+  'body contains user': (r) => r.body.includes('user'),
+});</div>
+                <div class="description">JSON response validation</div>
+                <div class="code-block">let data = JSON.parse(response.body);
+check(data, {
+  'user name is correct': (d) => d.name === 'John',
+  'user ID exists': (d) => d.id !== undefined,
+});</div>
+            </div>
+
+            <!-- Thresholds -->
+            <div class="section">
+                <h2>📊 Thresholds</h2>
+                <div class="description">Performance thresholds</div>
+                <div class="code-block">export let options = {
+  thresholds: {
+    // 95% of requests must complete within 500ms
+    http_req_duration: ['p(95)<500'],
+    
+    // Less than 1% of requests should fail
+    http_req_failed: ['rate<0.01'],
+    
+    // Average response time should be under 200ms
+    http_req_duration: ['avg<200'],
+    
+    // Custom counter threshold
+    my_counter: ['count>100'],
+  },
+};</div>
+            </div>
+
+            <!-- Scenarios -->
+            <div class="section">
+                <h2>🎭 Scenarios</h2>
+                <div class="description">Advanced test scenarios</div>
+                <div class="code-block">export let options = {
+  scenarios: {
+    constant_load: {
+      executor: 'constant-vus',
+      vus: 20,
+      duration: '5m',
+    },
+    ramping_load: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '2m', target: 10 },
+        { duration: '5m', target: 50 },
+        { duration: '2m', target: 0 },
+      ],
+    },
+    spike_test: {
+      executor: 'constant-arrival-rate',
+      rate: 100,
+      timeUnit: '1s',
+      duration: '1m',
+      preAllocatedVUs: 50,
+    },
+  },
+};</div>
+            </div>
+
+            <!-- Custom Metrics -->
+            <div class="section">
+                <h2>📈 Custom Metrics</h2>
+                <div class="description">Create custom metrics</div>
+                <div class="code-block">import { Counter, Gauge, Rate, Trend } from 'k6/metrics';
+
+let myCounter = new Counter('my_counter');
+let myGauge = new Gauge('my_gauge');
+let myRate = new Rate('my_rate');
+let myTrend = new Trend('my_trend');
+
+export default function() {
+  myCounter.add(1);
+  myGauge.add(42);
+  myRate.add(true);
+  myTrend.add(response.timings.duration);
+}</div>
+            </div>
+
+            <!-- Data Parameterization -->
+            <div class="section">
+                <h2>📄 Data Parameterization</h2>
+                <div class="description">Using CSV data</div>
+                <div class="code-block">import { SharedArray } from 'k6/data';
+import papaparse from 'https://jslib.k6.io/papaparse/5.1.1/index.js';
+
+const csvData = new SharedArray('users', function() {
+  return papaparse.parse(open('./users.csv'), { header: true }).data;
+});
+
+export default function() {
+  let user = csvData[Math.floor(Math.random() * csvData.length)];
+  let response = http.get(`https://api.example.com/users/${user.id}`);
+}</div>
+                <div class="description">Using JSON data</div>
+                <div class="code-block">const data = JSON.parse(open('./data.json'));
+
+export default function() {
+  let randomUser = data.users[Math.floor(Math.random() * data.users.length)];
+}</div>
+            </div>
+
+            <!-- Environment Variables -->
+            <div class="section">
+                <h2>🔧 Environment Variables</h2>
+                <div class="description">Using environment variables</div>
+                <div class="code-block">let baseUrl = __ENV.BASE_URL || 'https://httpbin.org';
+let apiKey = __ENV.API_KEY;
+
+export default function() {
+  let params = {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+    },
+  };
+  http.get(`${baseUrl}/get`, params);
+}</div>
+                <div class="description">Running with environment variables</div>
+                <div class="command">k6 run -e BASE_URL=https://api.example.com -e API_KEY=secret script.js</div>
+            </div>
+
+            <!-- Output Options -->
+            <div class="section">
+                <h2>📤 Output Options</h2>
+                <div class="description">JSON output</div>
+                <div class="command">k6 run --out json=results.json script.js</div>
+                <div class="description">CSV output</div>
+                <div class="command">k6 run --out csv=results.csv script.js</div>
+                <div class="description">InfluxDB output</div>
+                <div class="command">k6 run --out influxdb=http://localhost:8086/k6 script.js</div>
+                <div class="description">Multiple outputs</div>
+                <div class="command">k6 run --out json=results.json --out csv=results.csv script.js</div>
+            </div>
+
+            <!-- Lifecycle Functions -->
+            <div class="section">
+                <h2>🔄 Lifecycle Functions</h2>
+                <div class="description">Test lifecycle hooks</div>
+                <div class="code-block">export function setup() {
+  // Setup code - runs once at start
+  return { token: 'auth-token' };
+}
+
+export default function(data) {
+  // Main test function
+  let response = http.get('https://api.example.com/data', {
+    headers: { 'Authorization': `Bearer ${data.token}` },
+  });
+}
+
+export function teardown(data) {
+  // Teardown code - runs once at end
+  console.log('Test completed');
+}</div>
+            </div>
+
+            <!-- Error Handling -->
+            <div class="section">
+                <h2>🚨 Error Handling</h2>
+                <div class="description">Handling errors gracefully</div>
+                <div class="code-block">import { check, fail } from 'k6';
+
+export default function() {
+  let response = http.get('https://api.example.com/users');
+  
+  if (!check(response, {
+    'status is 200': (r) => r.status === 200,
+  })) {
+    fail('API returned non-200 status');
+  }
+  
+  try {
+    let data = JSON.parse(response.body);
+  } catch (e) {
+    console.error('Failed to parse JSON:', e);
+  }
+}</div>
+            </div>
+
+            <!-- WebSocket Testing -->
+            <div class="section">
+                <h2>🔌 WebSocket Testing</h2>
+                <div class="description">Testing WebSocket connections</div>
+                <div class="code-block">import ws from 'k6/ws';
+import { check } from 'k6';
+
+export default function() {
+  let url = 'ws://echo.websocket.org';
+  let params = { tags: { my_tag: 'websocket' } };
+  
+  let response = ws.connect(url, params, function(socket) {
+    socket.on('open', function() {
+      console.log('WebSocket connected');
+      socket.send('Hello');
+    });
+    
+    socket.on('message', function(data) {
+      console.log('Received:', data);
+    });
+    
+    socket.setTimeout(function() {
+      socket.close();
+    }, 10000);
+  });
+  
+  check(response, { 'status is 101': (r) => r && r.status === 101 });
+}</div>
+            </div>
+
+            <!-- Common CLI Options -->
+            <div class="section">
+                <h2>⌨️ Common CLI Options</h2>
+                <div class="description">Useful command line options</div>
+                <div class="command">k6 run --vus 50 --duration 5m script.js</div>
+                <div class="command">k6 run --iterations 1000 script.js</div>
+                <div class="command">k6 run --http-debug script.js</div>
+                <div class="command">k6 run --no-summary script.js</div>
+                <div class="command">k6 run --quiet script.js</div>
+                <div class="command">k6 run --verbose script.js</div>
+                <div class="command">k6 run --config config.json script.js</div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="section">
+                <h2>📊 Key Metrics</h2>
+                <div class="description">Understanding K6 metrics</div>
+                <div class="metric">http_req_duration</div> - Request duration<br>
+                <div class="metric">http_req_failed</div> - Request failure rate<br>
+                <div class="metric">http_reqs</div> - Total HTTP requests<br>
+                <div class="metric">vus</div> - Virtual users<br>
+                <div class="metric">vus_max</div> - Max virtual users<br>
+                <div class="metric">iterations</div> - Script iterations<br>
+                <div class="metric">iteration_duration</div> - Iteration duration<br>
+                <div class="metric">data_received</div> - Data received<br>
+                <div class="metric">data_sent</div> - Data sent
+            </div>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Pro Tips:</strong>
+            <ul>
+                <li>Start with smoke tests (1-2 VUs) before scaling up</li>
+                <li>Use <span class="highlight">sleep()</span> to simulate realistic user behavior</li>
+                <li>Set appropriate thresholds to catch performance regressions</li>
+                <li>Use <span class="highlight">SharedArray</span> for large datasets to save memory</li>
+                <li>Monitor system resources during load tests</li>
+                <li>Use scenarios for complex load patterns</li>
+                <li>Always validate your test results with checks</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Best Practices:</strong>
+            <ul>
+                <li>Never run load tests against production without permission</li>
+                <li>Start with low load and gradually increase</li>
+                <li>Monitor both application and infrastructure metrics</li>
+                <li>Use realistic test data and scenarios</li>
+                <li>Consider network latency in your test environment</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
