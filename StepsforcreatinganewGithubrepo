@@ -1,0 +1,193 @@
+Step 1: Install GitHub CLI on Ubuntu
+
+# Update package list
+sudo apt update
+
+# Install required dependencies
+sudo apt install -y curl gpg
+
+# Add GitHub CLI repository
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+
+# Add the repository to sources
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+# Update package list again
+sudo apt update
+
+# Install GitHub CLI
+sudo apt install -y gh
+
+# Verify installation
+gh --version
+
+Step 2: Complete Repository Creation Workflow
+
+# 1. Authenticate with GitHub (one-time setup)
+gh auth login
+# Choose:
+# - GitHub.com
+# - HTTPS
+# - Yes (authenticate Git with GitHub credentials)
+# - Login with a web browser (recommended)
+
+# 2. Create new project directory
+mkdir my-ubuntu-project
+cd my-ubuntu-project
+
+# 3. Initialize Git repository
+git init
+
+# 4. Configure Git (if not already done)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# 5. Create initial project files
+echo "# My Ubuntu Project" > README.md
+echo "This project was created on Ubuntu using terminal commands only!" >> README.md
+echo "" >> README.md
+echo "## Installation" >> README.md
+echo "\`\`\`bash" >> README.md
+echo "git clone https://github.com/harinder83Aus/my-ubuntu-project.git" >> README.md
+echo "cd my-ubuntu-project" >> README.md
+echo "\`\`\`" >> README.md
+
+# Create .gitignore file
+cat > .gitignore << 'EOF'
+# Logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+*.tar.gz
+EOF
+
+# Create a simple script file
+cat > run.sh << 'EOF'
+#!/bin/bash
+echo "Hello from Ubuntu terminal!"
+echo "Project: $(basename $(pwd))"
+echo "Date: $(date)"
+EOF
+
+# Make script executable
+chmod +x run.sh
+
+# Create a simple application file
+cat > app.py << 'EOF'
+#!/usr/bin/env python3
+"""
+Simple Python application created via Ubuntu terminal
+"""
+
+def main():
+    print("🚀 Hello from Ubuntu!")
+    print("This app was created entirely from the terminal.")
+    
+    # Display system info
+    import platform
+    print(f"System: {platform.system()}")
+    print(f"Python version: {platform.python_version()}")
+
+if __name__ == "__main__":
+    main()
+EOF
+
+# Make Python script executable
+chmod +x app.py
+
+# 6. Stage all files
+git add .
+
+# 7. Review what will be committed
+git status
+
+# 8. Make initial commit
+git commit -m "feat: Initial Ubuntu project setup
+
+- Add comprehensive README with installation instructions
+- Create .gitignore with common patterns
+- Add executable bash script for project info
+- Add Python application with system information
+- Set up complete project structure"
+
+# 9. Create GitHub repository and push (all in one command!)
+gh repo create my-ubuntu-project --public --description "Project created entirely from Ubuntu terminal" --source=. --remote=origin --push
+
+# 10. Verify everything worked
+echo "✅ Repository created successfully!"
+gh repo view
+git remote -v
+git log --oneline
+
+Additional Useful Commands
+
+# Check authentication status
+gh auth status
+
+# List your repositories
+gh repo list
+
+# Clone repository later
+gh repo clone harinder83Aus/my-ubuntu-project
+
+# View repository in browser
+gh repo view --web
+
+# Create repository with specific features
+gh repo create my-advanced-project \
+  --public \
+  --description "Advanced project with multiple features" \
+  --add-readme \
+  --gitignore=Python \
+  --license=MIT \
+  --source=. \
+  --remote=origin \
+  --push
+
+Troubleshooting Ubuntu-Specific Issues
+
+  # If you get permission errors
+sudo chown -R $USER:$USER ~/.config/gh
+
+# If GitHub CLI is not found after installation
+which gh
+echo $PATH
+
+# If git is not installed
+sudo apt install -y git
+
+# If Python is not available for the example
+sudo apt install -y python3
+
+# Check Ubuntu version
+lsb_release -a
+
+# Verify all tools are working
+git --version
+gh --version
+python3 --version
