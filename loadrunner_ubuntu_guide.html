@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoadRunner on Ubuntu - Complete Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            color: #2d3748;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #4facfe;
+            padding-bottom: 8px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            color: #92400e;
+        }
+        
+        .alert-info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1e40af;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            color: #065f46;
+        }
+        
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .method-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #4facfe;
+        }
+        
+        .method-title {
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background: #ecfdf5;
+            border-left: 3px solid #10b981;
+        }
+        
+        .cons {
+            background: #fef2f2;
+            border-left: 3px solid #ef4444;
+        }
+        
+        .pros h4, .cons h4 {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .pros h4 {
+            color: #065f46;
+        }
+        
+        .cons h4 {
+            color: #991b1b;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            background: #f8fafc;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4facfe;
+            position: relative;
+            padding-left: 50px;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background: #4facfe;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .command {
+            color: #68d391;
+        }
+        
+        .comment {
+            color: #a0aec0;
+        }
+        
+        .alternative-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .alternative-card {
+            background: linear-gradient(135deg, #fef7ff 0%, #fae8ff 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #a855f7;
+        }
+        
+        .alternative-title {
+            color: #581c87;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .download-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            .method-grid,
+            .alternative-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="download-btn" onclick="window.print()">Print/Save PDF</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>LoadRunner on Ubuntu</h1>
+            <p>Complete Guide for VuGen Scripting & Controller Setup</p>
+        </div>
+
+        <!-- Licensing Requirements -->
+        <div class="content-section">
+            <h2 class="section-title">📄 Licensing Requirements</h2>
+            
+            <div class="alert alert-warning">
+                <strong>Important:</strong> LoadRunner Professional/Enterprise requires commercial licensing. Community Edition has limitations but is free for learning.
+            </div>
+
+            <h3 style="margin: 20px 0 10px 0; color: #2d3748;">License Options:</h3>
+            
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-title">LoadRunner Community Edition (FREE)</div>
+                    <ul class="feature-list">
+                        <li>Up to 50 virtual users</li>
+                        <li>Limited to 30-day script recording</li>
+                        <li>Basic protocols supported</li>
+                        <li>Perfect for learning and practice</li>
+                        <li>No technical support</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-title">LoadRunner Professional (PAID)</div>
+                    <ul class="feature-list">
+                        <li>Unlimited virtual users (hardware dependent)</li>
+                        <li>All protocols and features</li>
+                        <li>Commercial support</li>
+                        <li>Advanced analysis capabilities</li>
+                        <li>Requires expensive license (~$10K+/year)</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-title">Trial License (30-day FREE)</div>
+                    <ul class="feature-list">
+                        <li>Full Professional features</li>
+                        <li>Limited to 30 days</li>
+                        <li>Good for evaluation</li>
+                        <li>Requires registration</li>
+                        <li>Can be extended for learning purposes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ubuntu Installation Challenge -->
+        <div class="content-section">
+            <h2 class="section-title">🐧 Ubuntu Installation Challenge</h2>
+            
+            <div class="alert alert-warning">
+                <strong>Key Issue:</strong> LoadRunner VuGen and Controller are Windows-only applications. They do not have native Linux/Ubuntu versions.
+            </div>
+
+            <h3 style="margin: 20px 0 10px 0; color: #2d3748;">Available Methods:</h3>
+
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-title">Method 1: Windows VM on Ubuntu</div>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>✅ Pros</h4>
+                            <ul style="margin: 0; padding-left: 15px; font-size: 0.9rem;">
+                                <li>Full LoadRunner functionality</li>
+                                <li>Official support</li>
+                                <li>All features available</li>
+                                <li>Best for learning</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>❌ Cons</h4>
+                            <ul style="margin: 0; padding-left: 15px; font-size: 0.9rem;">
+                                <li>Resource intensive</li>
+                                <li>Requires Windows license</li>
+                                <li>VM performance overhead</li>
+                                <li>Complex networking setup</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-title">Method 2: Wine/PlayOnLinux</div>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>✅ Pros</h4>
+                            <ul style="margin: 0; padding-left: 15px; font-size: 0.9rem;">
+                                <li>No VM overhead</li>
+                                <li>Direct Ubuntu installation</li>
+                                <li>No Windows license needed</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>❌ Cons</h4>
+                            <ul style="margin: 0; padding-left: 15px; font-size: 0.9rem;">
+                                <li>Unstable and unreliable</li>
+                                <li>Many features don't work</li>
+                                <li>Not officially supported</li>
+                                <li>Frequent crashes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-title">Method 3: Cloud-based Windows</div>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>✅ Pros</h4>
+                            <ul style="margin: 0; padding-left: 15px; font-size: 0.9rem;">
+                                <li>No local resource usage</li>
+                                <li>Scalable performance</li>
+                                <li>Access from anywhere</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>❌ Cons</h4>
+                            <ul style="margin: 0; padding-left: 15px; font-size: 0.9rem;">
+                                <li>Ongoing costs</li>
+                                <li>Internet dependency</li>
+                                <li>Network latency issues</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Approach -->
+        <div class="content-section">
+            <h2 class="section-title">🎯 Recommended Approach: Windows VM</h2>
+            
+            <div class="alert alert-success">
+                <strong>Best Option:</strong> Install Windows 10/11 in VirtualBox or VMware, then install LoadRunner Community Edition.
+            </div>
+
+            <h3 style="margin: 20px 0 10px 0; color: #2d3748;">Step-by-Step Installation:</h3>
+
+            <ol class="step-list">
+                <li>
+                    <strong>Install VirtualBox on Ubuntu</strong>
+                    <div class="code-block">
+<span class="command">sudo apt update</span>
+<span class="command">sudo apt install virtualbox virtualbox-ext-pack</span>
+<span class="comment"># Or download latest from virtualbox.org</span>
+                    </div>
+                </li>
+
+                <li>
+                    <strong>Download Windows 10/11 ISO</strong>
+                    <div style="margin: 10px 0; font-size: 0.9rem;">
+                        • Get Windows 10/11 evaluation ISO from Microsoft<br>
+                        • 90-day free trial, renewable<br>
+                        • Or use existing Windows license
+                    </div>
+                </li>
+
+                <li>
+                    <strong>Create Windows VM</strong>
+                    <div style="margin: 10px 0; font-size: 0.9rem;">
+                        • Allocate minimum 8GB RAM (16GB recommended)<br>
+                        • 100GB+ storage space<br>
+                        • Enable hardware virtualization<br>
+                        • Configure network as bridged/NAT
+                    </div>
+                </li>
+
+                <li>
+                    <strong>Install Windows in VM</strong>
+                    <div style="margin: 10px 0; font-size: 0.9rem;">
+                        • Boot from Windows ISO<br>
+                        • Complete installation process<br>
+                        • Install VirtualBox Guest Additions<br>
+                        • Configure shared folders if needed
+                    </div>
+                </li>
+
+                <li>
+                    <strong>Download LoadRunner Community Edition</strong>
+                    <div style="margin: 10px 0; font-size: 0.9rem;">
+                        • Visit Micro Focus website<br>
+                        • Register for free account<br>
+                        • Download Community Edition (~4GB)<br>
+                        • Includes VuGen, Controller, and Analysis
+                    </div>
+                </li>
+
+                <li>
+                    <strong>Install LoadRunner Components</strong>
+                    <div style="margin: 10px 0; font-size: 0.9rem;">
+                        • Run installer as Administrator<br>
+                        • Select Custom installation<br>
+                        • Install VuGen, Controller, Load Generators<br>
+                        • Configure license (Community Edition is automatic)
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <!-- VM Configuration Tips -->
+        <div class="content-section">
+            <h2 class="section-title">⚙️ VM Configuration for LoadRunner</h2>
+
+            <h3 style="margin: 20px 0 10px 0; color: #2d3748;">Optimal VM Settings:</h3>
+
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-title">System Resources</div>
+                    <ul class="feature-list">
+                        <li><strong>RAM:</strong> 8GB minimum, 16GB+ recommended</li>
+                        <li><strong>CPU:</strong> 4+ cores allocated</li>
+                        <li><strong>Storage:</strong> 100GB+ available space</li>
+                        <li><strong>Graphics:</strong> Enable 3D acceleration</li>
+                    </ul>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-title">Network Configuration</div>
+                    <ul class="feature-list">
+                        <li><strong>Adapter 1:</strong> NAT for internet access</li>
+                        <li><strong>Adapter 2:</strong> Host-only for load generator</li>
+                        <li><strong>Port forwarding:</strong> For web applications</li>
+                        <li><strong>DNS:</strong> Configure properly for load testing</li>
+                    </ul>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-title">Performance Optimization</div>
+                    <ul class="feature-list">
+                        <li>Enable hardware virtualization (VT-x/AMD-V)</li>
+                        <li>Allocate maximum video memory</li>
+                        <li>Disable Windows visual effects</li>
+                        <li>Install VM tools/guest additions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linux Load Testing Alternatives -->
+        <div class="content-section">
+            <h2 class="section-title">🚀 Native Linux Alternatives</h2>
+            
+            <div class="alert alert-info">
+                <strong>Consider These:</strong> If you prefer native Linux tools, these alternatives offer similar functionality to LoadRunner.
+            </div>
+
+            <div class="alternative-grid">
+                <div class="alternative-card">
+                    <div class="alternative-title">Apache JMeter</div>
+                    <ul class="feature-list">
+                        <li>Free and open source</li>
+                        <li>GUI similar to LoadRunner</li>
+                        <li>Java-based, cross-platform</li>
+                        <li>Good protocol support</li>
+                        <li>Active community</li>
+                    </ul>
+                </div>
+
+                <div class="alternative-card">
+                    <div class="alternative-title">K6 (Grafana)</div>
+                    <ul class="feature-list">
+                        <li>Modern, developer-friendly</li>
+                        <li>JavaScript-based scripting</li>
+                        <li>Excellent CI/CD integration</li>
+                        <li>Cloud and on-premise</li>
+                        <li>Great reporting</li>
+                    </ul>
+                </div>
+
+                <div class="alternative-card">
+                    <div class="alternative-title">Artillery.io</div>
+                    <ul class="feature-list">
+                        <li>Node.js based</li>
+                        <li>Simple YAML configuration</li>
+                        <li>Good for API testing</li>
+                        <li>Lightweight and fast</li>
+                        <li>Free tier available</li>
+                    </ul>
+                </div>
+
+                <div class="alternative-card">
+                    <div class="alternative-title">Locust</div>
+                    <ul class="feature-list">
+                        <li>Python-based scripting</li>
+                        <li>Web-based UI</li>
+                        <li>Distributed load testing</li>
+                        <li>Developer-friendly</li>
+                        <li>Highly customizable</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Start Commands -->
+        <div class="content-section">
+            <h2 class="section-title">🚀 Quick Start: JMeter on Ubuntu</h2>
+            
+            <div class="alert alert-info">
+                <strong>Alternative:</strong> While setting up LoadRunner VM, you can start practicing with JMeter immediately.
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Install JMeter on Ubuntu</span>
+<span class="command">sudo apt update</span>
+<span class="command">sudo apt install default-jdk</span>
+<span class="command">wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.6.2.tgz</span>
+<span class="command">tar -xzf apache-jmeter-5.6.2.tgz</span>
+<span class="command">cd apache-jmeter-5.6.2/bin</span>
+<span class="command">./jmeter</span>
+
+<span class="comment"># Or install via package manager</span>
+<span class="command">sudo apt install jmeter</span>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="content-section">
+            <h2 class="section-title">💡 Final Recommendations</h2>
+
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-title">For Learning LoadRunner</div>
+                    <ul class="feature-list">
+                        <li>Use Windows VM with Community Edition</li>
+                        <li>Start with simple HTTP scripts</li>
+                        <li>Practice correlation and parameterization</li>
+                        <li>Learn Controller basics with small loads</li>
+                        <li>Focus on analysis and reporting</li>
+                    </ul>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-title">For Production Work</div>
+                    <ul class="feature-list">
+                        <li>Consider native Linux tools (JMeter, K6)</li>
+                        <li>Better CI/CD integration</li>
+                        <li>Lower infrastructure costs</li>
+                        <li>More flexible and scriptable</li>
+                        <li>Modern development practices</li>
+                    </ul>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-title">Skill Development Path</div>
+                    <ul class="feature-list">
+                        <li>Master LoadRunner concepts in VM</li>
+                        <li>Learn modern tools (JMeter, K6)</li>
+                        <li>Practice on both platforms</li>
+                        <li>Build portfolio with multiple tools</li>
+                        <li>Focus on methodology over tools</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
