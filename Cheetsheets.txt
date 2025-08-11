@@ -1,0 +1,10 @@
+This is a Simple readme file for the Cheatsheets I have collated.
+
+The purpose of Cheatsheets is for me to learn, practice and sharpen my skills on the different tools and commands which would help me in getting better at Linux, Github, Jenkins, Docker and other such stuff.
+
+I intend to have fun along the way and keep learning.
+
+Here's to more such days! 
+
+Cheers,
+Harinder
