@@ -1,0 +1,69 @@
+For transitioning into Site Reliability Engineering (SRE), here are the most important programming languages to focus on, prioritized by relevance:
+
+## Essential Languages (Start Here)
+
+**Python** - Your #1 priority
+- Most widely used in SRE for automation, monitoring, and tooling
+- Extensive libraries for infrastructure management (boto3 for AWS, kubernetes client, etc.)
+- Great for scripting, data analysis, and building reliability tools
+- Used heavily at Google (where SRE originated) and most tech companies
+
+**Go** - Critical for modern SRE
+- Designed for distributed systems and cloud-native applications
+- Used by Kubernetes, Docker, Prometheus, and many SRE tools
+- Excellent for building high-performance, concurrent services
+- Increasingly the language of choice for new infrastructure tools
+
+## Very Important
+
+**Bash/Shell Scripting**
+- Essential for Linux system administration and automation
+- Quick automation tasks, deployment scripts, and troubleshooting
+- Every SRE needs solid shell scripting skills
+
+**JavaScript/TypeScript** (if working with web services)
+- Understanding frontend/backend interaction helps with debugging
+- Many monitoring dashboards and tools use JavaScript
+- Node.js for backend services you might need to troubleshoot
+
+## Language-Specific Context
+
+**Java** - Important if working with Java-heavy environments
+- Many enterprise companies run large Java applications
+- Understanding JVM performance and debugging is valuable
+
+**Rust** - Emerging but growing fast
+- Used for high-performance system tools
+- Good to learn if you want to be ahead of the curve
+
+## Learning Path Recommendation
+
+1. **Start with Python** (2-3 months focus)
+   - Learn automation, APIs, data handling
+   - Practice with AWS/cloud SDKs
+   - Build monitoring scripts
+
+2. **Add Go** (1-2 months)
+   - Focus on concurrency and HTTP services
+   - Try building simple microservices
+   - Learn Kubernetes client programming
+
+3. **Strengthen Bash** (ongoing)
+   - Practice daily with system administration tasks
+   - Learn advanced scripting techniques
+
+4. **Add others based on your target companies**
+   - Research what your target companies use
+   - Java for enterprise environments
+   - JavaScript for web-heavy companies
+
+## Practical Advice
+
+- **Focus on automation and tooling** rather than just language syntax
+- **Learn infrastructure as code** (Terraform, CloudFormation)
+- **Practice with real SRE scenarios** - monitoring, alerting, incident response
+- **Contribute to open-source SRE tools** to build experience
+
+The key is depth in Python and Go rather than breadth across many languages. These two will cover 80% of your SRE programming needs.
+
+What's your current programming background? I can provide more specific guidance based on where you're starting from.
